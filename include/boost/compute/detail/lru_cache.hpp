@@ -90,25 +90,8 @@ public:
 
         // return the value, but first update its place in the most
         // recently used list
-        typename list_type::iterator j = i->second.second;
-        if(j != m_list.begin()){
-            // move item to the front of the most recently used list
-            m_list.erase(j);
-            m_list.push_front(key);
-
-            // update iterator in map
-            j = m_list.begin();
-            const value_type &value = i->second.first;
-            m_map[key] = std::make_pair(value, j);
-
-            // return the value
-            return value;
-        }
-        else {
-            // the item is already at the front of the most recently
-            // used list so just return it
-            return i->second.first;
-        }
+        m_list.splice(m_list.begin(), m_list, i->second.second);
+        return i->second.first;
     }
 
     void clear()
